@@ -1,0 +1,30 @@
+Màu chính cho UI:
+
+Background chính: #FEFEFE (trắng kem nhẹ)
+Primary brand: #FF5722 (cam đỏ từ tai mèo)
+Secondary: #FF9800 (vàng cam từ biểu tượng)
+
+Màu phụ trợ:
+
+Dark text: #2D1B2E (nâu tím đậm từ viền)
+Light text: #6B4C57 (nâu nhạt hơn)
+Accent pink: #FFB3BA (hồng từ má mèo)
+
+Màu chức năng:
+
+Success: #4CAF50
+Warning: #FF9800 (dùng lại secondary)
+Error: #F44336
+Info: #2196F3
+
+Gradient suggestions:
+
+Hero section: linear-gradient(135deg, #FF5722 0%, #FF9800 100%)
+Cards: linear-gradient(to right, #FFF5F5 0%, #FFFFFF 100%)
+
+Cách áp dụng:
+
+Header/Navigation: Nền trắng, logo màu cam đỏ
+Buttons: Primary cam đỏ, hover chuyển sang vàng cam
+Cards/Sections: Nền trắng với viền nhẹ màu hồng
+Text: Đen chủ đạo, accent bằng màu cam
