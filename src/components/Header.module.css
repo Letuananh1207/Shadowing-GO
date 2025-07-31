@@ -1,0 +1,43 @@
+.header {
+  background-color: #fefefe;
+  padding: 0.75rem 1.5rem;
+  border-bottom: 1px solid #ffb3ba;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 2px 4px rgba(255, 179, 186, 0.1);
+}
+
+.logoWrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.logoImage {
+  width: 36px;
+  height: 36px;
+  object-fit: contain;
+}
+
+.appName {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #ff5722;
+  letter-spacing: 0.5px;
+}
+
+.iconGroup {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+}
+
+.iconButton {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+}

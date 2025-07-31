@@ -1,70 +1,34 @@
 import React from "react";
+import styles from "./Header.module.css";
+import { Search, User } from "lucide-react";
 
 export default function Header() {
   return (
-    <header
-      style={{
-        backgroundColor: "#FEFEFE",
-        padding: "1rem 2rem",
-        borderBottom: "1px solid #FFB3BA",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "space-between",
-      }}
-    >
+    <header className={styles.header}>
       {/* Logo + Tên ứng dụng */}
-      <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
+      <div className={styles.logoWrapper}>
         <img
           src="/Maneki-Neko.png"
           alt="Shadowing GO Logo"
-          style={{
-            width: "40px",
-            height: "40px",
-            objectFit: "contain",
-          }}
+          className={styles.logoImage}
         />
-        <span
-          style={{
-            fontSize: "1.5rem",
-            fontWeight: 700,
-            color: "#FF5722",
-            letterSpacing: "0.5px",
-          }}
-        >
-          Shadowing GO!
-        </span>
+        <span className={styles.appName}>Shadowing GO!</span>
       </div>
 
-      {/* Menu đơn giản */}
-      <nav>
-        <ul
-          style={{
-            listStyle: "none",
-            display: "flex",
-            gap: "1.5rem",
-            margin: 0,
-            padding: 0,
-          }}
-        >
-          {["Trang chủ", "Khóa học", "Tính năng", "Liên hệ"].map((item) => (
-            <li key={item}>
-              <a
-                href="#"
-                style={{
-                  textDecoration: "none",
-                  color: "#6B4C57",
-                  fontWeight: 500,
-                  transition: "color 0.2s",
-                }}
-                onMouseOver={(e) => (e.target.style.color = "#FF5722")}
-                onMouseOut={(e) => (e.target.style.color = "#6B4C57")}
-              >
-                {item}
-              </a>
-            </li>
-          ))}
-        </ul>
-      </nav>
+      {/* Search + Bell + User */}
+      <div className={styles.iconGroup}>
+        <button className={styles.iconButton} aria-label="Tìm kiếm">
+          <Search size={24} color="#6B4C57" strokeWidth={2} />
+        </button>
+
+        <button className={styles.iconButton} aria-label="Thông báo">
+          <img src="/bell.png" alt="Thông báo" width="24" height="24" />
+        </button>
+
+        <button className={styles.iconButton} aria-label="Tài khoản">
+          <User size={24} color="#6B4C57" strokeWidth={2} />
+        </button>
+      </div>
     </header>
   );
 }
