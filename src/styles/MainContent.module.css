@@ -1,0 +1,36 @@
+.dashBoard {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+}
+
+.mainBoard {
+  flex-grow: 1;
+}
+
+.lesson {
+  background-color: rgb(246, 244, 239);
+  padding: 30px 25px;
+  border-radius: 15px;
+}
+.lesson header {
+  margin: 20px 0;
+}
+
+hr {
+  border: none;
+  height: 1px;
+  background-color: #cccccc; /* màu xám nhạt */
+}
+
+.lessonList {
+  margin: 10px 20px;
+}
+
+.sideBar {
+  width: 340px;
+  height: 300px;
+  text-align: center;
+  background-color: rgb(246, 244, 239);
+  border-radius: 15px;
+}

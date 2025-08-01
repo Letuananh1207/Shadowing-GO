@@ -2,10 +2,15 @@
   background-color: #fefefe;
   padding: 0.75rem 1.5rem;
   border-bottom: 1px solid #ffb3ba;
+  box-shadow: 0 2px 4px rgba(255, 179, 186, 0.1);
+}
+
+.headerContent {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  box-shadow: 0 2px 4px rgba(255, 179, 186, 0.1);
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
 .logoWrapper {
@@ -23,7 +28,7 @@
 .appName {
   font-size: 1.4rem;
   font-weight: 700;
-  color: #ff5722;
+  color: #f84d18;
   letter-spacing: 0.5px;
 }
 
