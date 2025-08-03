@@ -13,12 +13,20 @@
   flex-grow: 1;
 }
 
+.subtitle {
+  margin-bottom: 2px;
+}
+
+.title {
+  margin-bottom: 5px;
+}
+
 .lessonIntro ul {
   list-style-position: inside;
 }
 
 .lessonStatus button {
-  padding: 10px 15px;
+  padding: 8px 20px;
   border: none;
   border-radius: 10px;
   background-color: #fe4d01;
