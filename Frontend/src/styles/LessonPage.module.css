@@ -1,0 +1,705 @@
+/* LessonPage.module.css */
+/* Main Container */
+.lessonDetail {
+  background-color: var(--color-background);
+  color: var(--color-text-dark);
+  font-family: system-ui, -apple-system, sans-serif;
+}
+
+/* Header */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  border-bottom: 1px solid #e5e5e5;
+  background-color: var(--header-background);
+}
+
+.lessonInfo {
+  color: var(--color-text-light);
+  font-size: 0.9rem;
+  font-weight: bold;
+}
+
+.timeDisplay {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  color: var(--color-text-dark);
+  font-size: 0.9rem;
+}
+
+/* Step Progress Section */
+.stepProgress {
+  padding: 1.5rem 2rem;
+  background: linear-gradient(to right, #fff0f0 0%, #ffffff 100%);
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.stepHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.stepTitle {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--color-primary);
+  margin: 0;
+}
+
+.stepCounter {
+  background-color: var(--color-primary);
+  color: var(--color-text-inverse);
+  padding: 0.4rem 0.8rem;
+  border-radius: 15px;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.stepContent {
+  margin-bottom: 1rem;
+  line-height: 1.6;
+}
+
+.stepContent p {
+  margin: 0.5rem 0;
+  font-size: 0.95rem;
+  white-space: pre-line;
+}
+
+.warningMessage {
+  background-color: rgba(255, 152, 0, 0.1);
+  border: 1px solid var(--color-secondary);
+  padding: 0.75rem;
+  border-radius: 6px;
+  margin: 1rem 0;
+  font-weight: 500;
+  color: var(--color-text-dark);
+  font-size: 0.9rem;
+}
+
+.progressBar {
+  width: 100%;
+  height: 4px;
+  background-color: #e5e5e5;
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.progressFill {
+  height: 100%;
+  background: var(--gradient-hero);
+  transition: width 0.3s ease;
+}
+
+/* Speed Control Section */
+.speedControl {
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.speedLabel {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-text-dark);
+  margin-bottom: 12px;
+  letter-spacing: 0.5px;
+}
+
+.speedButtons {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.speedBtn {
+  background: var(--color-background);
+  border: 2px solid var(--color-accent-pink);
+  color: var(--color-text-dark);
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-width: 60px;
+}
+
+.speedBtn:hover {
+  background: var(--color-accent-pink);
+  color: var(--color-text-dark);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(255, 179, 186, 0.4);
+}
+
+.speedBtnActive {
+  background: var(--gradient-hero) !important;
+  color: var(--color-text-inverse) !important;
+  border-color: var(--color-primary) !important;
+  box-shadow: 0 4px 16px rgba(255, 87, 34, 0.3);
+}
+
+/* Progress Bar */
+.audioProgressContainer {
+  margin: 20px 0;
+  padding: 0 4px;
+}
+
+.audioProgressBar {
+  width: 100%;
+  height: 8px;
+  background: linear-gradient(to right, #f5f5f5, #e8e8e8);
+  border-radius: 20px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.audioProgressBar:hover {
+  height: 10px;
+  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+.audioProgressFill {
+  height: 100%;
+  background: var(--gradient-hero);
+  border-radius: 20px;
+  transition: width 0.1s linear;
+  position: relative;
+}
+
+.audioProgressFill::after {
+  content: "";
+  position: absolute;
+  right: -2px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 16px;
+  height: 16px;
+  background: var(--color-primary);
+  border-radius: 50%;
+  box-shadow: 0 2px 8px rgba(255, 87, 34, 0.4);
+  opacity: 0;
+  transition: all 0.3s ease;
+}
+
+.audioProgressBar:hover .audioProgressFill::after {
+  opacity: 1;
+}
+
+/* Volume Control */
+.volumeControl {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 1rem 16px;
+  border-radius: 12px;
+  border: 1px solid var(--color-accent-pink);
+}
+
+.volumeControl svg {
+  color: var(--color-primary);
+  flex-shrink: 0;
+}
+
+.volumeSlider {
+  flex: 1;
+  height: 6px;
+  background: linear-gradient(to right, #f0f0f0, #e0e0e0);
+  border-radius: 10px;
+  outline: none;
+  -webkit-appearance: none;
+  cursor: pointer;
+}
+
+.volumeSlider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 18px;
+  height: 18px;
+  background: var(--gradient-hero);
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(255, 87, 34, 0.3);
+  transition: all 0.3s ease;
+}
+
+.volumeSlider::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+  box-shadow: 0 4px 16px rgba(255, 87, 34, 0.4);
+}
+
+.volumeSlider::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  background: var(--gradient-hero);
+  border-radius: 50%;
+  cursor: pointer;
+  border: none;
+  box-shadow: 0 2px 8px rgba(255, 87, 34, 0.3);
+}
+
+/* Audio Info Section */
+
+.audioSection {
+  border-radius: 6px;
+  font-size: 12px;
+  background-color: #f9f9f9;
+}
+
+/* Main Audio Box - All controls in one row */
+.audioControls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin: 4px 0;
+}
+
+/* Speed Control Dropdown/Select */
+.speedControl {
+  flex-shrink: 0;
+}
+
+.speedSelect {
+  background: var(--color-background);
+  border: 1px solid var(--color-accent-pink);
+  color: var(--color-text-dark);
+  padding: 4px 6px;
+  border-radius: 4px;
+  font-size: 10px;
+  cursor: pointer;
+  outline: none;
+  min-width: 45px;
+}
+
+.speedSelect:hover,
+.speedSelect:focus {
+  background: var(--color-accent-pink);
+  border-color: var(--color-primary);
+}
+
+/* Control Buttons */
+.controlBtn {
+  background: var(--color-background);
+  border: 1px solid var(--color-accent-pink);
+  color: var(--color-primary);
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.controlBtn:hover {
+  background: var(--color-accent-pink);
+}
+
+.controlBtn svg {
+  width: 10px;
+  height: 10px;
+}
+
+.playBtn {
+  width: 28px;
+  height: 28px;
+}
+
+.playBtn:hover {
+  background: var(--color-secondary);
+}
+
+.playBtn svg {
+  width: 12px;
+  height: 12px;
+}
+
+/* Mobile optimized */
+@media (max-width: 768px) {
+  .audioSection {
+    padding: 6px;
+  }
+
+  .audioControls {
+    gap: 6px;
+  }
+
+  .speedSelect {
+    min-width: 40px;
+    padding: 3px 4px;
+    font-size: 9px;
+  }
+
+  .controlBtn {
+    width: 22px;
+    height: 22px;
+  }
+
+  .playBtn {
+    width: 26px;
+    height: 26px;
+  }
+
+  .controlBtn svg,
+  .playBtn svg {
+    width: 8px;
+    height: 8px;
+  }
+
+  .volumeSlider {
+    width: 35px;
+  }
+
+  .timeDisplay {
+    font-size: 9px;
+    min-width: 50px;
+  }
+}
+/* Main Content */
+.mainContent {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1rem 2rem;
+  min-height: 500px;
+}
+
+.mainContent:has(.audioSection) {
+  flex-direction: column-reverse;
+  justify-content: flex-end;
+}
+
+.mainContent:has(.audioSection) header {
+  order: 3;
+}
+
+/* Dialogue Area */
+.dialogueArea {
+  margin: 0 auto;
+}
+
+.dialogueSection {
+  background: var(--color-background);
+  border: 2px solid var(--color-accent-pink);
+  border-radius: 12px;
+  padding: 2rem;
+  max-width: 600px;
+}
+
+.dialogueContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.dialogueLine {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.speakerAvatar {
+  min-width: 2rem;
+  height: 2rem;
+  background-color: var(--color-primary);
+  color: var(--color-text-inverse);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 0.9rem;
+}
+
+.messageBox {
+  flex: 1;
+  padding: 0.75rem 1rem;
+  background-color: var(--color-background);
+  border: 1px dotted var(--color-accent-pink);
+  border-radius: 8px;
+  font-size: 1.1rem;
+  line-height: 1.6;
+}
+
+/* Hidden Transcript State */
+.hiddenTranscript {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 2rem;
+  text-align: center;
+  min-height: 300px;
+}
+
+.audioIcon {
+  color: var(--color-primary);
+  margin-bottom: 1rem;
+}
+
+.hiddenSubtext {
+  color: var(--color-text-light);
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+/* Notes Section */
+.notesSection {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  padding: 2rem 1.5rem;
+  background-color: #f9f9f9;
+}
+
+.addNoteBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 1rem;
+  background-color: var(--color-background);
+  border: 2px dashed var(--color-accent-pink);
+  border-radius: 8px;
+  color: var(--color-text-light);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 0.9rem;
+}
+
+.addNoteBtn:hover {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+.addNoteBtnActive {
+  background-color: var(--color-secondary);
+  border-color: var(--color-secondary);
+  color: var(--color-text-inverse);
+}
+
+.addNoteForm {
+  padding: 1rem;
+  background: var(--color-background);
+  border: 1px solid var(--color-accent-pink);
+  border-radius: 8px;
+}
+
+.noteTextarea {
+  width: 100%;
+  min-height: 80px;
+  padding: 0.75rem;
+  border: 1px solid var(--color-accent-pink);
+  border-radius: 6px;
+  resize: vertical;
+  font-size: 0.9rem;
+  font-family: inherit;
+  background-color: var(--color-background);
+  color: var(--color-text-dark);
+  box-sizing: border-box;
+}
+
+.noteTextarea:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 2px rgba(255, 87, 34, 0.2);
+}
+
+.formActions {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+}
+
+.saveBtn {
+  padding: 0.5rem 1rem;
+  background-color: var(--color-primary);
+  color: var(--color-text-inverse);
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.8rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.saveBtn:hover {
+  background-color: var(--color-secondary);
+}
+
+.cancelBtn {
+  padding: 0.5rem 1rem;
+  background-color: transparent;
+  color: var(--color-text-light);
+  border: 1px solid var(--color-accent-pink);
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.8rem;
+  transition: all 0.2s ease;
+}
+
+.cancelBtn:hover {
+  background-color: var(--color-accent-pink);
+}
+
+.noteItem {
+  padding: 1rem;
+  background-color: var(--color-background);
+  border: 1px solid var(--color-accent-pink);
+  border-radius: 8px;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: var(--color-text-dark);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.emptyState {
+  padding: 2rem 1rem;
+  text-align: center;
+  color: var(--color-text-light);
+  font-size: 0.85rem;
+  font-style: italic;
+  border: 1px dashed var(--color-accent-pink);
+  border-radius: 8px;
+}
+
+/* Step Navigation */
+.stepNavigation {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.5rem 2rem;
+  border-top: 1px solid #e5e5e5;
+  background-color: var(--color-background);
+}
+
+.navBtn {
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+  font-size: 0.9rem;
+}
+
+.navBtn:first-child {
+  background-color: transparent;
+  color: var(--color-text-light);
+  border: 1px solid var(--color-accent-pink);
+}
+
+.navBtn:first-child:hover:not(:disabled) {
+  background-color: var(--color-accent-pink);
+}
+
+.nextBtn {
+  background-color: var(--color-primary);
+  color: var(--color-text-inverse);
+}
+
+.nextBtn:hover:not(:disabled) {
+  background-color: var(--color-secondary);
+  transform: translateY(-1px);
+}
+
+.navBtn:disabled,
+.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+.requirementNotice {
+  background-color: rgba(255, 152, 0, 0.1);
+  border: 1px solid var(--color-secondary);
+  padding: 1rem;
+  border-radius: 8px;
+  margin: 0 2rem 1rem;
+}
+
+.requirementNotice p {
+  margin: 0.25rem 0;
+  color: var(--color-text-dark);
+  font-size: 0.9rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .mainContent {
+    grid-template-columns: 1fr;
+  }
+
+  .dialogueArea {
+    border-right: none;
+    border-bottom: 1px solid #e5e5e5;
+  }
+
+  .header {
+    padding: 1rem;
+  }
+
+  .stepProgress {
+    padding: 1rem;
+  }
+
+  .stepHeader {
+    flex-direction: column;
+    gap: 0.5rem;
+    text-align: center;
+  }
+
+  .audioSection {
+    padding: 1rem;
+  }
+
+  .stepNavigation {
+    padding: 1rem;
+  }
+
+  .dialogueSection {
+    padding: 1.5rem;
+  }
+
+  .notesSection {
+    padding: 1.5rem 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .header {
+    flex-direction: column;
+    gap: 1rem;
+    text-align: center;
+  }
+
+  .stepNavigation {
+    flex-direction: column;
+  }
+
+  .dialogueSection {
+    padding: 1rem;
+  }
+
+  .dialogueLine {
+    gap: 0.75rem;
+  }
+
+  .messageBox {
+    font-size: 1rem;
+  }
+}

@@ -1,0 +1,333 @@
+/* LessonPreviewModal.module.css */
+
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(45, 27, 46, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn 0.2s ease-out;
+}
+
+.modalContent {
+  background: var(--color-background, #fefefe);
+  border-radius: 12px;
+  width: 90%;
+  max-width: 600px;
+  max-height: 80vh;
+  overflow-y: auto;
+  position: relative;
+  padding: 0;
+  animation: slideIn 0.3s ease-out;
+  box-shadow: 0 8px 32px rgba(45, 27, 46, 0.15);
+}
+
+.closeBtn {
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  background: none;
+  border: none;
+  font-size: 28px;
+  cursor: pointer;
+  color: var(--color-text-light, #6b4c57);
+  z-index: 10;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+}
+
+.closeBtn:hover {
+  color: var(--color-text-dark, #2d1b2e);
+  background: rgba(45, 27, 46, 0.1);
+}
+
+.modalTitle {
+  color: var(--color-primary, #ff5722);
+  font-size: 28px;
+  margin: 0;
+  padding: 25px 30px 15px;
+  font-weight: 300;
+  line-height: 1.2;
+}
+
+.modalBody {
+  padding: 0 30px 30px;
+}
+
+.lessonCharacter {
+  background: var(
+    --gradient-hero,
+    linear-gradient(135deg, #ff5722 0%, #ff9800 100%)
+  );
+  border-radius: 12px;
+  padding: 25px;
+  display: flex;
+  align-items: center;
+  margin-bottom: 25px;
+  color: var(--color-text-inverse, #ffffff);
+  box-shadow: 0 4px 12px rgba(255, 87, 34, 0.3);
+}
+
+.lessonCharacter img {
+  height: 70px;
+  margin-right: 20px;
+  border-radius: 50%;
+  background: var(--color-background, #fefefe);
+  padding: 8px;
+}
+
+.speechBubble p {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.lessonModes {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.modeItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 0;
+  border-bottom: 1px solid var(--color-accent-pink, #ffb3ba);
+  gap: 15px;
+}
+
+.modeItem:last-child {
+  border-bottom: none;
+}
+
+.modeInfo {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.modeLabel {
+  font-weight: 600;
+  color: var(--color-text-dark, #2d1b2e);
+  font-size: 16px;
+}
+
+.notRanked {
+  color: var(--color-primary, #ff5722);
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.progressInfo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 13px;
+  color: var(--color-text-light, #6b4c57);
+  margin-top: 8px;
+}
+
+.progressBar {
+  width: 100%;
+  height: 8px;
+  background: var(--color-accent-pink, #ffb3ba);
+  border-radius: 4px;
+  margin: 8px 0;
+  overflow: hidden;
+}
+
+.progressFill {
+  height: 100%;
+  background: var(--gradient-hero, linear-gradient(90deg, #ff5722, #ff9800));
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+
+.progressText {
+  font-weight: 600;
+  color: var(--color-primary, #ff5722);
+  font-size: 14px;
+}
+
+.dots {
+  display: flex;
+  gap: 6px;
+  margin-left: auto;
+  margin-right: 15px;
+}
+
+.dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--color-accent-pink, #ffb3ba);
+  transition: background 0.2s ease;
+}
+
+.dot.filled {
+  background: var(--color-text-light, #6b4c57);
+}
+
+.playBtn,
+.readBtn {
+  background: var(--button-primary-bg, #ff5722);
+  color: var(--button-text, #ffffff);
+  border: none;
+  padding: 10px 20px;
+  border-radius: 25px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 14px;
+  min-width: 70px;
+  transition: all 0.2s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.playBtn:hover,
+.readBtn:hover {
+  background: var(--button-primary-hover-bg, #ff9800);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(255, 87, 34, 0.3);
+}
+
+.playBtn:active,
+.readBtn:active {
+  transform: translateY(0);
+}
+
+.modalFooter {
+  text-align: center;
+  margin-top: 25px;
+  padding-top: 20px;
+  border-top: 1px solid var(--color-accent-pink, #ffb3ba);
+}
+
+.seeMoreBtn {
+  background: var(--color-info, #2196f3);
+  color: var(--color-text-inverse, #ffffff);
+  border: none;
+  padding: 12px 35px;
+  border-radius: 25px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 14px;
+  transition: all 0.2s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.seeMoreBtn:hover {
+  background: #1976d2;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(33, 150, 243, 0.3);
+}
+
+.seeMoreBtn:active {
+  transform: translateY(0);
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .modalContent {
+    width: 95%;
+    margin: 20px;
+    max-height: 85vh;
+  }
+
+  .modalTitle {
+    padding: 20px 20px 15px;
+    font-size: 24px;
+  }
+
+  .modalBody {
+    padding: 0 20px 20px;
+  }
+
+  .lessonCharacter {
+    padding: 20px;
+    flex-direction: column;
+    text-align: center;
+    gap: 15px;
+  }
+
+  .lessonCharacter img {
+    margin-right: 0;
+    margin-bottom: 10px;
+  }
+
+  .modeItem {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 15px;
+    padding: 20px 0;
+  }
+
+  .modeInfo {
+    text-align: center;
+  }
+
+  .progressInfo {
+    justify-content: center;
+    gap: 20px;
+  }
+
+  .dots {
+    justify-content: center;
+    margin: 0;
+  }
+
+  .playBtn,
+  .readBtn {
+    width: 100%;
+    padding: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .modalTitle {
+    font-size: 20px;
+  }
+
+  .speechBubble p {
+    font-size: 16px;
+  }
+
+  .modeLabel {
+    font-size: 14px;
+  }
+}

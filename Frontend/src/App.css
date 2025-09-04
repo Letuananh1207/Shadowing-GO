@@ -1,0 +1,78 @@
+/* index.css */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+:root {
+  /* ==== Core Colors ==== */
+  --color-background: #fefefe;
+  --color-primary: #ff5722;
+  --color-secondary: #ff9800;
+
+  /* ==== Text Colors ==== */
+  --color-text-dark: #2d1b2e;
+  --color-text-light: #6b4c57;
+  --color-text-inverse: #ffffff; /* dùng khi background tối */
+
+  /* ==== Accent Colors ==== */
+  --color-accent-pink: #ffb3ba;
+
+  /* ==== Functional Colors ==== */
+  --color-success: #4caf50;
+  --color-warning: var(--color-secondary);
+  --color-error: #f44336;
+  --color-info: #2196f3;
+
+  /* ==== Gradients ==== */
+  --gradient-hero: linear-gradient(
+    135deg,
+    var(--color-primary) 0%,
+    var(--color-secondary) 100%
+  );
+  --gradient-card: linear-gradient(to right, #fff5f5 0%, #ffffff 100%);
+
+  /* ==== UI Specific ==== */
+  --header-background: var(--color-background);
+  --header-logo: var(--color-primary);
+
+  --button-primary-bg: var(--color-primary);
+  --button-primary-hover-bg: var(--color-secondary);
+  --button-text: var(--color-text-inverse);
+
+  --card-background: var(--color-background);
+  --card-border: var(--color-accent-pink);
+}
+
+a {
+  text-decoration: none;
+}
+
+html,
+body,
+#root {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+#main {
+  min-height: 100vh;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Optional: make MainContent fill remaining space */
+main {
+  flex: 1;
+}
+
+.mainContent {
+  padding: 1rem;
+  width: 1200px;
+  margin: 0 auto;
+}

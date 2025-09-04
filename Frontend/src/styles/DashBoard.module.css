@@ -1,0 +1,52 @@
+.dashBoard {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+  margin-top: 30px;
+}
+
+.mainBoard {
+  flex-grow: 1;
+}
+
+/* Thẻ Unit */
+.unit {
+  background-color: rgb(246, 244, 239);
+  padding: 30px 25px;
+  border-radius: 15px;
+  margin-bottom: 30px;
+}
+.unit header {
+  margin: 20px 20px;
+}
+
+header p {
+  font-size: 12px;
+  margin-bottom: 0.5rem;
+  font-weight: bold;
+  color: grey;
+}
+
+header h2 {
+  font-size: 22px;
+}
+
+hr {
+  border: none;
+  height: 1px;
+  background-color: #cccccc; /* màu xám nhạt */
+}
+
+/* Lesson */
+.lessonList {
+  margin: 10px 20px;
+}
+
+/* Side bar */
+.sideBar {
+  width: 340px;
+  height: 300px;
+  text-align: center;
+  background-color: rgb(246, 244, 239);
+  border-radius: 15px;
+}
