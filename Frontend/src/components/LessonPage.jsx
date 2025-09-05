@@ -98,7 +98,6 @@ export default function LessonPage() {
     unit: "Unit 1",
     section: "Section 1",
     lessonNumber: 1,
-    timeLimit: "1:30",
     audioUrl: "/public/demo.m4a",
     dialogue: [
       { speaker: "A", text: "今日はどうして振袖の人が多いんだろ。" },

@@ -19,21 +19,6 @@ export default function MainContent() {
             <LessonItem />
           </div>
         </section>
-
-        <section className={styles.unit}>
-          <header>
-            <p>CHƯƠNG 2:</p>
-            <h2>家族 ・夫婦・恋人の会話</h2>
-          </header>
-          <hr />
-          <div className={styles.lessonList}>
-            <LessonItem />
-            <hr />
-            <LessonItem />
-            <hr />
-            <LessonItem />
-          </div>
-        </section>
       </div>
       <div className={styles.sideBar}>Side bar</div>
     </div>

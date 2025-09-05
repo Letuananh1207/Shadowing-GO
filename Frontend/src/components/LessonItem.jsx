@@ -6,14 +6,12 @@ export default function LessonItem({
   lessonNumber = 1,
   description = "greeting others and saying goodbye",
   icon = "/japan_fan.png",
-  progress = 100,
 }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const lessonData = {
     title: "Where objects are misplaced",
     description: "Basic directions so you can play lost & found",
-    progress: progress,
     icon: icon,
   };
 
