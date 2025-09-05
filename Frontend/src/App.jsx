@@ -12,7 +12,7 @@ export default function App() {
         <main className="mainContent">
           <Routes>
             <Route path="/" element={<DashBoard />} />
-            <Route path="/learn" element={<LessonPage />} />
+            <Route path="/learn/:id" element={<LessonPage />} />
           </Routes>
         </main>
       </BrowserRouter>

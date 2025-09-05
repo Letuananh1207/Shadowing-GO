@@ -1,12 +1,12 @@
-import React from "react";
+import { useNavigate } from "react-router-dom";
 import styles from "../styles/LessonPreviewModal.module.css";
 
 const LessonPreviewModal = ({ isOpen, onClose, lessonData }) => {
+  const navigate = useNavigate();
   if (!isOpen) return null;
 
   const handlePlayLesson = () => {
-    // Điều hướng đến trang học
-    window.location.href = "/learn";
+    navigate(`/learn/${lessonData.id}`);
   };
 
   return (
@@ -30,19 +30,11 @@ const LessonPreviewModal = ({ isOpen, onClose, lessonData }) => {
             <div className={styles.modeItem}>
               <div className={styles.modeInfo}>
                 <span className={styles.modeLabel}>Luyện tập shadowing</span>
-                <div className={styles.modeDesc}>
-                  Bắt đầu bài tập shadowing bằng cách nghe và lặp lại.
-                </div>
+                <div className={styles.modeDesc}>{lessonData.description}</div>
               </div>
               <button className={styles.playBtn} onClick={handlePlayLesson}>
                 スタート
               </button>
-            </div>
-            <div className={styles.modeItem}>
-              <div className={styles.modeInfo}>
-                <span className={styles.modeLabel}>Story</span>
-                <div className={styles.modeDesc}>......</div>
-              </div>
             </div>
           </div>
         </div>

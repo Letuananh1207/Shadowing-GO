@@ -3,8 +3,9 @@ const Lesson = require("../models/Lesson");
 // Lấy danh sách lesson
 const getLessons = async (req, res) => {
   try {
-    const lessons = await Lesson.find();
-    res.json(lessons);
+    const lessonId = req.params.id;
+    const lesson = await Lesson.findById(lessonId);
+    res.json(lesson);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

@@ -9,8 +9,12 @@ import {
   Plus,
 } from "lucide-react";
 import styles from "../styles/LessonPage.module.css";
+import { useParams } from "react-router-dom";
 
 export default function LessonPage() {
+  const { id } = useParams();
+  const [lesson, setLesson] = useState({});
+  const [loading, setLoading] = useState(true);
   const [currentStep, setCurrentStep] = useState(1);
   const [notes, setNotes] = useState([]);
   const [showAddNote, setShowAddNote] = useState(false);
@@ -93,21 +97,21 @@ export default function LessonPage() {
       minTime: 300,
     },
   };
-
-  const lessonData = {
-    unit: "Unit 1",
-    section: "Section 1",
-    lessonNumber: 1,
-    audioUrl: "/public/demo.m4a",
-    dialogue: [
-      { speaker: "A", text: "今日はどうして振袖の人が多いんだろ。" },
-      { speaker: "B", text: "わかってるって。今やろうって思ったのに！" },
-      { speaker: "A", text: "いつもそう言うだけじゃない。" },
-      { speaker: "B", text: "だって、いつもそう思ってる時に言うから。" },
-    ],
-  };
-
   const currentStepConfig = stepConfig[currentStep];
+
+  useEffect(() => {
+    setLoading(true);
+    fetch(`http://localhost:5000/api/lessons/${id}`)
+      .then((res) => res.json())
+      .then((data) => {
+        setLesson(data);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error(error);
+        setLoading(false);
+      });
+  }, [id]);
 
   // Timer for tracking time spent on current step
   useEffect(() => {
@@ -348,12 +352,20 @@ export default function LessonPage() {
     }
   };
 
+  // --- nếu chưa có dữ liệu thì show loading ---
+  if (loading) {
+    return <div className={styles.lessonDetail}>Loading lesson...</div>;
+  }
+  if (!lesson) {
+    return <div className={styles.lessonDetail}>Không tìm thấy bài học.</div>;
+  }
+
   return (
     <div className={styles.lessonDetail}>
       {/* Hidden audio element */}
       <audio
         ref={audioRef}
-        src={lessonData.audioUrl}
+        src={lesson.audioUrl}
         preload="metadata"
         loop={currentStep > 1} // Auto-loop for practice steps
       />
@@ -386,12 +398,12 @@ export default function LessonPage() {
         {/* Header */}
         <header className={styles.header}>
           <div className={styles.lessonInfo}>
-            {lessonData.unit} / {lessonData.section} / {lessonData.lessonNumber}
+            {lesson.unit} / {lesson.section} / {lesson.lessonNumber}
           </div>
 
           <div className={styles.timeDisplay}>
             <Clock size={16} />
-            <span>{lessonData.timeLimit}</span>
+            <span>{lesson.timeLimit}</span>
           </div>
         </header>
         {/* Audio Controls - only show if allowed */}
@@ -443,7 +455,7 @@ export default function LessonPage() {
           {showTranscript() ? (
             <div className={styles.dialogueSection}>
               <div className={styles.dialogueContainer}>
-                {lessonData.dialogue.map((line, index) => (
+                {lesson.dialogue.map((line, index) => (
                   <div key={index} className={styles.dialogueLine}>
                     <div className={styles.speakerAvatar}>{line.speaker}</div>
                     <div className={styles.messageBox}>{line.text}</div>

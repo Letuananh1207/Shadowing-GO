@@ -3,7 +3,13 @@ const Unit = require("../models/Unit");
 // Lấy danh sách unit
 const getUnits = async (req, res) => {
   try {
-    const units = await Unit.find().sort({ index: 1 }).populate("lessons");
+    const units = await Unit.find()
+      .sort({ index: 1 })
+      .populate({
+        path: "lessons",
+        select: "-dialogue -audioUrl -__v",
+      })
+      .select("-index -__v");
     res.json(units);
   } catch (err) {
     res.status(500).json({ error: err.message });
