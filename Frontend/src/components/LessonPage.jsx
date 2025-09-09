@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 import styles from "../styles/LessonPage.module.css";
 import { useParams } from "react-router-dom";
+import stepConfig from "../assets/stepConfig";
 
 export default function LessonPage() {
   const { id } = useParams();
@@ -23,80 +24,9 @@ export default function LessonPage() {
   const [timeSpent, setTimeSpent] = useState(0);
   const [listenCount, setListenCount] = useState(0);
   const [transcriptVisible, setTranscriptVisible] = useState(true);
-  const [playbackSpeed, setPlaybackSpeed] = useState(1.0);
-  const [currentTime, setCurrentTime] = useState(0);
-  const [duration, setDuration] = useState(30);
-  const [volume, setVolume] = useState(1.0);
-
   const audioRef = useRef(null);
   const stepTimerRef = useRef(null);
   const stepStartTimeRef = useRef(0);
-
-  const stepConfig = {
-    1: {
-      title: "Bước 1: Đọc hiểu nội dung script",
-      content:
-        "Bạn đã hoàn thành việc chọn unit và chuẩn bị tài liệu. Hãy đọc kỹ transcript để hiểu nội dung trước khi chuyển sang bước tiếp theo.",
-      warning:
-        '📖 Hãy đọc và hiểu rõ nội dung transcript trước khi bấm "Tiếp theo"',
-      allowedControls: [],
-      allowedNote: true,
-      transcriptMode: "reading",
-      minTime: 0,
-    },
-    2: {
-      title: "Bước 2: Nghe rõ ý nghĩa",
-      content:
-        "🎧 Nghe audio và đọc transcript để hiểu rõ ý nghĩa từng từ, từng câu.\n🎭 Hãy tự hình dung ra bối cảnh hội thoại, hình ảnh nhân vật, các mối quan hệ.",
-      warning: "⚠️ Nghe ít nhất 3 lần trước khi chuyển bước tiếp theo",
-      allowedControls: ["play", "pause", "stop", "rewind", "forward"],
-      allowedNote: false,
-      transcriptMode: "reading",
-      minTime: 15,
-      minListens: 3,
-    },
-    3: {
-      title: "Bước 3: Nắm bắt nhịp độ âm thanh (đầu) ",
-      content:
-        "👁️ Đọc đồng bộ: Vừa nghe vừa dùng mắt dõi theo lời thoại. ĐỪNG NÓI GÌ CẢ.\n🤫 Shadowing câm: Vừa nghe, vừa nhẩm lại trong đầu mà không phát âm.",
-      warning: "🔇 Chỉ được nghe và đọc theo, KHÔNG được nói ra tiếng!",
-      allowedControls: ["play", "pause", "stop", "rewind", "forward", "speed"],
-      allowedNote: false,
-      transcriptMode: "reading",
-      minTime: 120,
-    },
-    4: {
-      title: "Bước 4: Tập nói (miệng)",
-      content:
-        "🗣️ Shadowing cùng lời thoại: Vừa nhìn transcript, vừa nghe và nhắc lại ngay sau đó.\n🤐 Nhẩm theo: Lẩm nhẩm nhắc lại mà không nhìn transcript (có thể ẩn transcript).",
-      warning: "💬 Bây giờ được phép nói! Hãy luyện tập với tốc độ tự nhiên.",
-      allowedControls: ["play", "pause", "stop", "rewind", "forward", "speed"],
-      allowedNote: false,
-      transcriptMode: "optional",
-      minTime: 180,
-    },
-    5: {
-      title: "Bước 5: Shadowing theo nhịp điệu thực",
-      content:
-        "🎵 Shadowing nhịp điệu: Shadowing mà KHÔNG nhìn transcript.\n🎯 Luyện tập trung thực cùng tốc độ, cùng ngữ điệu, cùng cường độ âm thanh, cùng nhịp ngưng nghỉ.",
-      warning:
-        "🚫 Transcript đã bị ẩn. Tập trung vào sự lưu loát, không cần ý thức về nội dung!",
-      allowedControls: ["play", "pause", "stop", "rewind", "forward", "speed"],
-      allowedNote: false,
-      transcriptMode: "hidden",
-      minTime: 240,
-    },
-    6: {
-      title: "Bước 6: Shadowing với nội dung",
-      content:
-        "🧠 Shadowing với nội dung: Vừa shadowing vừa ý thức về nội dung ý nghĩa.\n🎭 Đừng thay đổi ngữ điệu đã học, đồng thời hình dung ra tâm trạng của người nói.",
-      warning: "🎪 Tưởng tượng bạn đang thực sự trong cuộc hội thoại này!",
-      allowedControls: ["play", "pause", "stop", "rewind", "forward", "speed"],
-      allowedNote: false,
-      transcriptMode: "hidden",
-      minTime: 300,
-    },
-  };
   const currentStepConfig = stepConfig[currentStep];
 
   useEffect(() => {
@@ -135,63 +65,48 @@ export default function LessonPage() {
     };
   }, [currentStep]);
 
-  // Audio time update and event handlers
+  // Audio event handlers
+  // Audio event handlers
   useEffect(() => {
     const audio = audioRef.current;
-    if (!audio) return;
+    if (!audio || !lesson.duration) return;
 
-    const updateTime = () => {
-      setCurrentTime(Math.floor(audio.currentTime));
-    };
-
-    const handleLoadedMetadata = () => {
-      setDuration(Math.floor(audio.duration));
-    };
-
-    const handleEnded = () => {
-      setIsPlaying(false);
-      // Auto-loop for practice
-      if (currentStep > 1) {
-        audio.currentTime = 0;
-      }
-    };
+    const { start, end } = lesson.duration;
 
     const handlePlay = () => {
       setIsPlaying(true);
+      // Nếu play từ đầu thì nhảy tới start
+      if (audio.currentTime < start || audio.currentTime > end) {
+        audio.currentTime = start;
+      }
     };
 
     const handlePause = () => {
       setIsPlaying(false);
     };
 
-    audio.addEventListener("timeupdate", updateTime);
-    audio.addEventListener("loadedmetadata", handleLoadedMetadata);
-    audio.addEventListener("ended", handleEnded);
+    const handleTimeUpdate = () => {
+      if (audio.currentTime >= end) {
+        audio.pause();
+        setIsPlaying(false);
+
+        // Nếu đang ở bước luyện tập có loop
+        if (currentStep > 1) {
+          audio.currentTime = start;
+        }
+      }
+    };
+
     audio.addEventListener("play", handlePlay);
     audio.addEventListener("pause", handlePause);
+    audio.addEventListener("timeupdate", handleTimeUpdate);
 
     return () => {
-      audio.removeEventListener("timeupdate", updateTime);
-      audio.removeEventListener("loadedmetadata", handleLoadedMetadata);
-      audio.removeEventListener("ended", handleEnded);
       audio.removeEventListener("play", handlePlay);
       audio.removeEventListener("pause", handlePause);
+      audio.removeEventListener("timeupdate", handleTimeUpdate);
     };
-  }, [currentStep]);
-
-  // Update audio playback rate when speed changes
-  useEffect(() => {
-    if (audioRef.current) {
-      audioRef.current.playbackRate = playbackSpeed;
-    }
-  }, [playbackSpeed]);
-
-  // Update audio volume
-  useEffect(() => {
-    if (audioRef.current) {
-      audioRef.current.volume = volume;
-    }
-  }, [volume]);
+  }, [lesson.duration, currentStep]);
 
   // Reset states when step changes and configure transcript visibility
   useEffect(() => {
@@ -270,15 +185,6 @@ export default function LessonPage() {
     }
   };
 
-  const handleStop = () => {
-    const audio = audioRef.current;
-    if (audio) {
-      audio.pause();
-      audio.currentTime = 0;
-    }
-    setCurrentTime(0);
-  };
-
   const handleRewind = () => {
     const audio = audioRef.current;
     if (audio) {
@@ -290,20 +196,6 @@ export default function LessonPage() {
     const audio = audioRef.current;
     if (audio) {
       audio.currentTime = Math.min(audio.duration, audio.currentTime + 5);
-    }
-  };
-
-  const handleSpeedChange = (newSpeed) => {
-    setPlaybackSpeed(newSpeed);
-  };
-
-  const handleProgressClick = (e) => {
-    const audio = audioRef.current;
-    if (audio && audio.duration) {
-      const rect = e.currentTarget.getBoundingClientRect();
-      const clickX = e.clientX - rect.left;
-      const percentage = clickX / rect.width;
-      audio.currentTime = percentage * audio.duration;
     }
   };
 
@@ -377,15 +269,6 @@ export default function LessonPage() {
           <div className={styles.stepCounter}>Bước {currentStep}/6</div>
         </div>
 
-        <div className={styles.stepContent}>
-          {/* <div style={{ whiteSpace: "pre-line" }}>
-            {currentStepConfig.content}
-          </div> */}
-          {/* <div className={styles.warningMessage}>
-            {currentStepConfig.warning}
-          </div> */}
-        </div>
-
         <div className={styles.progressBar}>
           <div
             className={styles.progressFill}
@@ -398,7 +281,7 @@ export default function LessonPage() {
         {/* Header */}
         <header className={styles.header}>
           <div className={styles.lessonInfo}>
-            {lesson.unit} / {lesson.section} / {lesson.lessonNumber}
+            {lesson.unit.subTitle} / Bài {lesson.lessonNumber}
           </div>
 
           <div className={styles.timeDisplay}>
@@ -406,46 +289,39 @@ export default function LessonPage() {
             <span>{lesson.timeLimit}</span>
           </div>
         </header>
+
         {/* Audio Controls - only show if allowed */}
         {currentStepConfig.allowedControls.length > 0 && (
           <div className={styles.audioSection}>
-            {/* Volume Control */}
-            <div className={styles.volumeControl}>
-              {/* Audio Controls - only show if allowed */}
-              {currentStepConfig.allowedControls.length > 0 && (
-                <div>
-                  {/* Audio Controls */}
-                  <div className={styles.audioControls}>
-                    {isControlAllowed("rewind") && (
-                      <button
-                        onClick={handleRewind}
-                        className={styles.controlBtn}
-                        title="Tua lại 5s"
-                      >
-                        <RotateCcw size={20} />
-                      </button>
-                    )}
+            <div className={styles.audioControls}>
+              {isControlAllowed("rewind") && (
+                <button
+                  onClick={handleRewind}
+                  className={styles.controlBtn}
+                  title="Tua lại 5s"
+                >
+                  <RotateCcw size={20} />
+                </button>
+              )}
 
-                    {isControlAllowed("play") && (
-                      <button
-                        onClick={handlePlay}
-                        className={`${styles.controlBtn} ${styles.playBtn}`}
-                        title={isPlaying ? "Tạm dừng" : "Phát"}
-                      >
-                        {isPlaying ? <Pause size={24} /> : <Play size={24} />}
-                      </button>
-                    )}
-                    {isControlAllowed("forward") && (
-                      <button
-                        onClick={handleFastForward}
-                        className={styles.controlBtn}
-                        title="Tua nhanh 5s"
-                      >
-                        <FastForward size={20} />
-                      </button>
-                    )}
-                  </div>
-                </div>
+              {isControlAllowed("play") && (
+                <button
+                  onClick={handlePlay}
+                  className={`${styles.controlBtn} ${styles.playBtn}`}
+                  title={isPlaying ? "Tạm dừng" : "Phát"}
+                >
+                  {isPlaying ? <Pause size={24} /> : <Play size={24} />}
+                </button>
+              )}
+
+              {isControlAllowed("forward") && (
+                <button
+                  onClick={handleFastForward}
+                  className={styles.controlBtn}
+                  title="Tua nhanh 5s"
+                >
+                  <FastForward size={20} />
+                </button>
               )}
             </div>
           </div>

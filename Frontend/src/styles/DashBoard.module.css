@@ -1,3 +1,53 @@
+.dashBoard_headBar {
+  position: sticky;
+  top: 64px;
+  background-color: white;
+}
+
+.dashBoard_headBar h1 {
+  border-bottom: 1px solid #dddddd;
+  padding: 16px 0;
+  font-size: 1.6em;
+}
+
+/* TabBar Styles */
+.tabBar {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.tabBar button {
+  background: transparent;
+  border: none;
+  padding: 0.75rem 1.25rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #bbbbbb;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.tabBar button:hover {
+  color: var(--color-primary);
+}
+
+.tabBar button.activeTab {
+  color: var(--color-text-light);
+}
+
+.tabBar button.activeTab::after {
+  content: "";
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  right: 0;
+  height: 3px;
+  border-radius: 2px;
+  background: var(--gradient-hero);
+}
+
 .dashBoard {
   display: flex;
   align-items: flex-start;
@@ -12,8 +62,8 @@
 /* Thẻ Unit */
 .unit {
   background-color: rgb(246, 244, 239);
-  padding: 30px 25px;
-  border-radius: 15px;
+  padding: 25px;
+  border-radius: 12px;
   margin-bottom: 30px;
 }
 .unit header {
@@ -40,13 +90,17 @@ hr {
 /* Lesson */
 .lessonList {
   margin: 10px 20px;
+  display: flex;
+  flex-direction: column;
 }
 
 /* Side bar */
 .sideBar {
   width: 340px;
   height: 300px;
+  padding: 25px;
+  margin-top: 1em;
   text-align: center;
   background-color: rgb(246, 244, 239);
-  border-radius: 15px;
+  border-radius: 12px;
 }

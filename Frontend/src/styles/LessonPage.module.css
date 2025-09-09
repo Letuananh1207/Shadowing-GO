@@ -395,10 +395,19 @@
 
 .dialogueSection {
   background: var(--color-background);
-  border: 2px solid var(--color-accent-pink);
+  border: 1px solid var(--color-accent-pink);
   border-radius: 12px;
   padding: 2rem;
   max-width: 600px;
+  max-height: 400px;
+  overflow-y: scroll;
+  scrollbar-width: none; /* ẩn cho Firefox */
+  -ms-overflow-style: none; /* ẩn cho IE, Edge cũ */
+}
+
+/* ẩn cho Chrome, Safari */
+.dialogueSection::-webkit-scrollbar {
+  display: none;
 }
 
 .dialogueContainer {

@@ -11,6 +11,10 @@ const lessonSchema = new mongoose.Schema({
       text: { type: String, required: true },
     },
   ],
+  duration: {
+    start: { type: Number, required: true },
+    end: { type: Number, required: true },
+  },
   unit: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Unit",

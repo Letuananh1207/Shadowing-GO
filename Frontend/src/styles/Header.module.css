@@ -1,7 +1,8 @@
 .header {
+  position: sticky;
+  top: 0;
   background-color: #fefefe;
   padding: 0.75rem 1.5rem;
-  border-bottom: 1px solid #ffb3ba;
   box-shadow: 0 2px 4px rgba(255, 179, 186, 0.1);
 }
 

@@ -4,7 +4,10 @@ const Lesson = require("../models/Lesson");
 const getLessons = async (req, res) => {
   try {
     const lessonId = req.params.id;
-    const lesson = await Lesson.findById(lessonId);
+    const lesson = await Lesson.findById(lessonId).populate(
+      "unit",
+      "title subTitle"
+    );
     res.json(lesson);
   } catch (err) {
     res.status(500).json({ error: err.message });

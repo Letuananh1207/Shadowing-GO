@@ -5,7 +5,6 @@ const connectDB = require("./config/db");
 const userRoutes = require("./routes/userRoutes");
 const lessonRoutes = require("./routes/lessonRoutes");
 const unitRoutes = require("./routes/unitRoutes");
-
 dotenv.config();
 connectDB();
 

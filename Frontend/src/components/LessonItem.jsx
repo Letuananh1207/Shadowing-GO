@@ -29,9 +29,11 @@ export default function LessonItem({ id, lessonNumber, description, icon }) {
         <div className={styles.lessonIntro}>
           <div>
             <h3 className={styles.title}>Bài {lessonNumber}</h3>
-            <ul>
-              <li>{description}</li>
-            </ul>
+            {description ? (
+              <ul>
+                <li>{description}</li>
+              </ul>
+            ) : null}
           </div>
         </div>
         <div className={styles.lessonStatus}>

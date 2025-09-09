@@ -1,44 +1,88 @@
 import { useState, useEffect } from "react";
 import styles from "../styles/DashBoard.module.css";
 import LessonItem from "./LessonItem";
+import TodayBoard from "./TodayBoard";
 export default function MainContent() {
   const [units, setUnits] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
+  const [activeTab, setActiveTab] = useState("today"); // tab mặc định là "today"
 
+  // Chỉ fetch khi activeTab = "learning"
   useEffect(() => {
-    fetch("http://localhost:5000/api/units")
-      .then((res) => res.json())
-      .then((data) => {
-        setUnits(data);
-        console.log(data);
-      })
-      .catch((error) => console.log(error));
-  }, []);
+    if (activeTab === "learning") {
+      setLoading(true);
+      fetch("http://localhost:5000/api/units")
+        .then((res) => res.json())
+        .then((data) => {
+          setUnits(data);
+          setLoading(false);
+        })
+        .catch((error) => {
+          console.log(error);
+          setLoading(false);
+        });
+    }
+  }, [activeTab]);
 
   return (
-    <div className={styles.dashBoard}>
-      <div className={styles.mainBoard}>
-        {units.map((unit) => (
-          <section key={unit._id} className={styles.unit}>
-            <header>
-              <p>CHƯƠNG - {unit.title}</p>
-              <h2>{unit.subTitle}</h2>
-            </header>
-            <hr />
-            <div className={styles.lessonList}>
-              {unit.lessons.map((lesson) => (
-                <LessonItem
-                  id={lesson._id}
-                  lessonNumber={lesson.lessonNumber}
-                  description={lesson.description}
-                  icon={`/${lesson.icon}`}
-                />
-              ))}
-            </div>
-          </section>
-        ))}
+    <div>
+      <div className={styles.dashBoard_headBar}>
+        <h1>Konnichiwa, Anh!</h1>
+
+        {/* Tabbar */}
+        <div className={styles.tabBar}>
+          <button
+            className={activeTab === "today" ? styles.activeTab : ""}
+            onClick={() => setActiveTab("today")}
+          >
+            Today
+          </button>
+          <button
+            className={activeTab === "learning" ? styles.activeTab : ""}
+            onClick={() => setActiveTab("learning")}
+          >
+            Learning Path
+          </button>
+        </div>
       </div>
-      <div className={styles.sideBar}>Side bar</div>
+
+      <div className={styles.dashBoard}>
+        <div className={styles.mainBoard}>
+          {activeTab === "today" && <TodayBoard />}
+
+          {activeTab === "learning" && (
+            <>
+              {loading ? (
+                <p>Đang tải dữ liệu...</p>
+              ) : (
+                units.map((unit) => (
+                  <section key={unit._id} className={styles.unit}>
+                    <header>
+                      <p>CHƯƠNG - {unit.title}</p>
+                      <h2>{unit.subTitle}</h2>
+                    </header>
+                    <hr />
+                    <div className={styles.lessonList}>
+                      {unit.lessons.map((lesson) => (
+                        <LessonItem
+                          key={lesson._id}
+                          id={lesson._id}
+                          lessonNumber={lesson.lessonNumber}
+                          description={lesson.description}
+                          icon={`/${lesson.icon}`}
+                        />
+                      ))}
+                    </div>
+                  </section>
+                ))
+              )}
+            </>
+          )}
+        </div>
+        {activeTab === "learning" && (
+          <div className={styles.sideBar}>Side bar</div>
+        )}
+      </div>
     </div>
   );
 }

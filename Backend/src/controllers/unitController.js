@@ -7,7 +7,7 @@ const getUnits = async (req, res) => {
       .sort({ index: 1 })
       .populate({
         path: "lessons",
-        select: "-dialogue -audioUrl -__v",
+        select: "-dialogue -audioUrl -__v -duration",
       })
       .select("-index -__v");
     res.json(units);

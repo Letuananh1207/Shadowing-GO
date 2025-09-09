@@ -15,5 +15,5 @@ unitSchema.virtual("lessons", {
 unitSchema.set("toObject", { virtuals: true });
 unitSchema.set("toJSON", { virtuals: true });
 
-const Unit = mongoose.model("unit", unitSchema);
+const Unit = mongoose.model("Unit", unitSchema);
 module.exports = Unit;
