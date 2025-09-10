@@ -11,7 +11,10 @@ export default function MainContent() {
   useEffect(() => {
     if (activeTab === "learning") {
       setLoading(true);
-      fetch("http://localhost:5000/api/units")
+      fetch("http://localhost:5000/api/units", {
+        method: "GET",
+        credentials: "include",
+      })
         .then((res) => res.json())
         .then((data) => {
           setUnits(data);
@@ -58,18 +61,30 @@ export default function MainContent() {
                 units.map((unit) => (
                   <section key={unit._id} className={styles.unit}>
                     <header>
-                      <p>CHƯƠNG - {unit.title}</p>
-                      <h2>{unit.subTitle}</h2>
+                      <div className={styles.weekCount}>
+                        Tuần <span>{unit.index}</span>
+                      </div>
+                      <div className="flow">
+                        <p>{unit.title}</p>
+                        <h2>{unit.subTitle}</h2>
+                      </div>
+                      <img
+                        src={"/" + unit.tag + ".png"}
+                        alt="unit_icon"
+                        className={styles.unit_img}
+                      />
                     </header>
                     <hr />
                     <div className={styles.lessonList}>
-                      {unit.lessons.map((lesson) => (
+                      {unit.lessons.map((lesson, index) => (
                         <LessonItem
-                          key={lesson._id}
+                          index={lesson.index}
                           id={lesson._id}
                           lessonNumber={lesson.lessonNumber}
                           description={lesson.description}
-                          icon={`/${lesson.icon}`}
+                          week={unit.index}
+                          status={lesson.status}
+                          icon={`/day${index + 1}.png`}
                         />
                       ))}
                     </div>
@@ -79,9 +94,7 @@ export default function MainContent() {
             </>
           )}
         </div>
-        {activeTab === "learning" && (
-          <div className={styles.sideBar}>Side bar</div>
-        )}
+        {activeTab === "learning" && <div className={styles.sideBar}></div>}
       </div>
     </div>
   );

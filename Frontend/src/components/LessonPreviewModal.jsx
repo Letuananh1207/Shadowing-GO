@@ -22,7 +22,7 @@ const LessonPreviewModal = ({ isOpen, onClose, lessonData }) => {
           <div className={styles.lessonCharacter}>
             <img src={lessonData.icon || "/japan_fan.png"} alt="Character" />
             <div className={styles.speechBubble}>
-              <p>Practice shadowing technique with native audio</p>
+              <p>Học cách từ chối 1 ai đó</p>
             </div>
           </div>
 

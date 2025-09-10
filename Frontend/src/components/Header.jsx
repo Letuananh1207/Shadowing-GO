@@ -16,7 +16,7 @@ export default function Header() {
             />
           </a>
 
-          <span className={styles.appName}>BeraBera</span>
+          <span className={styles.appName}>BeraBera jp</span>
         </div>
 
         {/* Search + Bell + User */}
@@ -30,7 +30,14 @@ export default function Header() {
           </button>
 
           <button className={styles.iconButton} aria-label="Tài khoản">
-            <User size={24} color="#6B4C57" strokeWidth={2} />
+            <User
+              size={24}
+              color="#6B4C57"
+              strokeWidth={2}
+              onClick={() => {
+                window.location.href = "http://localhost:5000/api/auth/google";
+              }}
+            />
           </button>
         </div>
       </div>

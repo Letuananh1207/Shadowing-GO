@@ -1,13 +1,20 @@
 import React, { useState } from "react";
 import styles from "../styles/LessonItem.module.css";
 import LessonPreviewModal from "./LessonPreviewModal";
-
-export default function LessonItem({ id, lessonNumber, description, icon }) {
+import { Check, Lock } from "lucide-react";
+export default function LessonItem({
+  index,
+  week,
+  id,
+  description,
+  status,
+  icon,
+}) {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const lessonData = {
     id,
-    title: `Bài ${lessonNumber}`,
+    title: `Tuần ${week}`,
     description,
     icon,
   };
@@ -28,7 +35,7 @@ export default function LessonItem({ id, lessonNumber, description, icon }) {
         <img className={styles.lessonIcon} src={icon} alt="Lesson Icon" />
         <div className={styles.lessonIntro}>
           <div>
-            <h3 className={styles.title}>Bài {lessonNumber}</h3>
+            <h3 className={styles.title}>Ngày {index}</h3>
             {description ? (
               <ul>
                 <li>{description}</li>
@@ -37,9 +44,15 @@ export default function LessonItem({ id, lessonNumber, description, icon }) {
           </div>
         </div>
         <div className={styles.lessonStatus}>
-          <button onClick={handleStartClick} className={styles.startBtn}>
-            <span>スタート</span>
-          </button>
+          {status === "locked" ? (
+            <Lock size={24} color="red" />
+          ) : status === "completed" ? (
+            <Check size={24} color="green" />
+          ) : (
+            <button onClick={handleStartClick} className={styles.startBtn}>
+              <span>スタート</span>
+            </button>
+          )}
         </div>
       </article>
 

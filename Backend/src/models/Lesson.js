@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 
 const lessonSchema = new mongoose.Schema({
+  index: { type: Number, required: true },
   lessonNumber: { type: Number, required: true },
   description: { type: String },
   icon: { type: String, default: "japan_fan.png" },

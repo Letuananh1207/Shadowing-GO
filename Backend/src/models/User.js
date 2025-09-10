@@ -1,13 +1,10 @@
 const mongoose = require("mongoose");
 
-const userSchema = new mongoose.Schema(
-  {
-    name: { type: String, required: true },
-    email: { type: String, required: true, unique: true },
-    age: { type: Number, default: 18 },
-  },
-  { timestamps: true } // Tự động thêm createdAt, updatedAt
-);
+const userSchema = new mongoose.Schema({
+  googleId: { type: String, required: true, unique: true },
+  displayName: { type: String },
+  email: { type: String },
+  photo: { type: String },
+});
 
-const User = mongoose.model("User", userSchema);
-module.exports = User;
+module.exports = mongoose.model("User", userSchema);
