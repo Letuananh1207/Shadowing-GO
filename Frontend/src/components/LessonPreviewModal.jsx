@@ -16,13 +16,13 @@ const LessonPreviewModal = ({ isOpen, onClose, lessonData }) => {
           ×
         </button>
 
-        <h2 className={styles.modalTitle}>{lessonData.title}</h2>
+        <h2 className={styles.modalTitle}>{lessonData.week}</h2>
 
         <div className={styles.modalBody}>
           <div className={styles.lessonCharacter}>
             <img src={lessonData.icon || "/japan_fan.png"} alt="Character" />
             <div className={styles.speechBubble}>
-              <p>Học cách từ chối 1 ai đó</p>
+              <p>{lessonData.title}. meow mew~</p>
             </div>
           </div>
 

@@ -8,7 +8,7 @@ const stepConfig = {
     allowedControls: [],
     allowedNote: true,
     transcriptMode: "reading",
-    minTime: 0,
+    minTime: 30,
   },
   2: {
     title: "Bước 2: Nghe rõ ý nghĩa",

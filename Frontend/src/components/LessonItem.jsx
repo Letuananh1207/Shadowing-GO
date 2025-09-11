@@ -6,6 +6,7 @@ export default function LessonItem({
   index,
   week,
   id,
+  title,
   description,
   status,
   icon,
@@ -14,7 +15,8 @@ export default function LessonItem({
 
   const lessonData = {
     id,
-    title: `Tuần ${week}`,
+    week: `Tuần ${week}`,
+    title,
     description,
     icon,
   };
@@ -32,22 +34,27 @@ export default function LessonItem({
   return (
     <>
       <article className={styles.lessonItem}>
-        <img className={styles.lessonIcon} src={icon} alt="Lesson Icon" />
+        <div
+          className={`${styles.iconBlock} ${
+            status === "completed" ? styles.done : ""
+          }`}
+        >
+          <img className={styles.lessonIcon} src={icon} alt="Lesson Icon" />
+        </div>
         <div className={styles.lessonIntro}>
-          <div>
-            <h3 className={styles.title}>Ngày {index}</h3>
-            {description ? (
+          <span>Ngày {index}</span>
+          <h3 className={styles.title}>{title}</h3>
+          {/* {description ? (
               <ul>
                 <li>{description}</li>
               </ul>
-            ) : null}
-          </div>
+            ) : null} */}
         </div>
         <div className={styles.lessonStatus}>
           {status === "locked" ? (
-            <Lock size={24} color="red" />
+            <Lock size={20} color="grey" />
           ) : status === "completed" ? (
-            <Check size={24} color="green" />
+            <Check size={20} color="green" />
           ) : (
             <button onClick={handleStartClick} className={styles.startBtn}>
               <span>スタート</span>

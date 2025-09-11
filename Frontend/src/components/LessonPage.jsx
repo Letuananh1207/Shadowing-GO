@@ -7,6 +7,11 @@ import {
   FastForward,
   Volume2,
   Plus,
+  HelpCircle,
+  Save,
+  Edit3,
+  Check,
+  X,
 } from "lucide-react";
 import styles from "../styles/LessonPage.module.css";
 import { useParams } from "react-router-dom";
@@ -20,13 +25,21 @@ export default function LessonPage() {
   const [notes, setNotes] = useState([]);
   const [showAddNote, setShowAddNote] = useState(false);
   const [newNote, setNewNote] = useState("");
+  const [editingNoteId, setEditingNoteId] = useState(null);
+  const [editingContent, setEditingContent] = useState("");
   const [isPlaying, setIsPlaying] = useState(false);
   const [timeSpent, setTimeSpent] = useState(0);
+  const [totalTimeSpent, setTotalTimeSpent] = useState(0);
   const [listenCount, setListenCount] = useState(0);
   const [transcriptVisible, setTranscriptVisible] = useState(true);
+  const [isSavingNotes, setIsSavingNotes] = useState(false);
+  const [saveNotesMessage, setSaveNotesMessage] = useState("");
+  const [loadingNotes, setLoadingNotes] = useState(false);
   const audioRef = useRef(null);
   const stepTimerRef = useRef(null);
+  const totalTimerRef = useRef(null);
   const stepStartTimeRef = useRef(0);
+  const lessonStartTimeRef = useRef(0);
   const currentStepConfig = stepConfig[currentStep];
 
   useEffect(() => {
@@ -36,6 +49,13 @@ export default function LessonPage() {
       .then((data) => {
         setLesson(data);
         setLoading(false);
+
+        // Bắt đầu đếm thời gian tổng khi load xong lesson
+        lessonStartTimeRef.current = Date.now();
+        startTotalTimer();
+
+        // Load notes sau khi load lesson
+        loadNotes();
       })
       .catch((error) => {
         console.error(error);
@@ -43,7 +63,50 @@ export default function LessonPage() {
       });
   }, [id]);
 
-  // Timer for tracking time spent on current step
+  // Load notes từ server
+  const loadNotes = async () => {
+    setLoadingNotes(true);
+    try {
+      const response = await fetch(`http://localhost:5000/api/notes/${id}`, {
+        credentials: "include",
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        const lesson = data.data;
+        // data.content là array các note strings
+        if (lesson.content && Array.isArray(lesson.content)) {
+          // Convert strings to objects với id để dễ quản lý
+          const notesWithIds = lesson.content.map((note, index) => ({
+            id: Date.now() + index, // temporary ID
+            content: note,
+            isLocal: false, // đánh dấu đã lưu trên server
+          }));
+          setNotes(notesWithIds);
+        }
+      }
+    } catch (error) {
+      console.error("Error loading notes:", error);
+    } finally {
+      setLoadingNotes(false);
+    }
+  };
+
+  // Timer tổng cho toàn bộ bài học
+  const startTotalTimer = () => {
+    if (totalTimerRef.current) {
+      clearInterval(totalTimerRef.current);
+    }
+
+    totalTimerRef.current = setInterval(() => {
+      const elapsed = Math.floor(
+        (Date.now() - lessonStartTimeRef.current) / 1000
+      );
+      setTotalTimeSpent(elapsed);
+    }, 1000);
+  };
+
+  // Timer cho tracking time spent on current step
   useEffect(() => {
     if (stepTimerRef.current) {
       clearInterval(stepTimerRef.current);
@@ -65,7 +128,18 @@ export default function LessonPage() {
     };
   }, [currentStep]);
 
-  // Audio event handlers
+  // Cleanup timers khi component unmount
+  useEffect(() => {
+    return () => {
+      if (stepTimerRef.current) {
+        clearInterval(stepTimerRef.current);
+      }
+      if (totalTimerRef.current) {
+        clearInterval(totalTimerRef.current);
+      }
+    };
+  }, []);
+
   // Audio event handlers
   useEffect(() => {
     const audio = audioRef.current;
@@ -128,15 +202,91 @@ export default function LessonPage() {
 
   const addNote = () => {
     if (newNote.trim()) {
-      const noteWithTimestamp = `${newNote.trim()}`;
-      setNotes([...notes, noteWithTimestamp]);
+      const newNoteObj = {
+        id: Date.now(),
+        content: newNote.trim(),
+        isLocal: true, // đánh dấu chưa lưu
+      };
+      setNotes([...notes, newNoteObj]);
       setNewNote("");
       setShowAddNote(false);
     }
   };
 
-  const deleteNote = (index) => {
-    setNotes(notes.filter((_, i) => i !== index));
+  const deleteNote = (noteId) => {
+    setNotes(notes.filter((note) => note.id !== noteId));
+  };
+
+  const startEditNote = (noteId, content) => {
+    setEditingNoteId(noteId);
+    setEditingContent(content);
+  };
+
+  const saveEditNote = () => {
+    if (editingContent.trim()) {
+      setNotes(
+        notes.map((note) =>
+          note.id === editingNoteId
+            ? { ...note, content: editingContent.trim(), isLocal: true }
+            : note
+        )
+      );
+    }
+    setEditingNoteId(null);
+    setEditingContent("");
+  };
+
+  const cancelEditNote = () => {
+    setEditingNoteId(null);
+    setEditingContent("");
+  };
+
+  // Hàm lưu notes lên server
+  const saveNotes = async () => {
+    if (notes.length === 0) {
+      setSaveNotesMessage("Không có ghi chú để lưu");
+      setTimeout(() => setSaveNotesMessage(""), 3000);
+      return;
+    }
+
+    setIsSavingNotes(true);
+    setSaveNotesMessage("");
+
+    try {
+      // Chỉ gửi content của notes
+      const noteContents = notes.map((note) => note.content);
+
+      const response = await fetch("http://localhost:5000/api/notes", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include", // gửi cookie
+        body: JSON.stringify({
+          lessonId: id,
+          content: noteContents,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Không thể lưu ghi chú");
+      }
+
+      const data = await response.json();
+      setSaveNotesMessage("✅ Lưu ghi chú thành công!");
+
+      // Đánh dấu tất cả notes đã được lưu
+      setNotes(notes.map((note) => ({ ...note, isLocal: false })));
+
+      // Tự động ẩn thông báo sau 3 giây
+      setTimeout(() => setSaveNotesMessage(""), 3000);
+    } catch (error) {
+      console.error("Error saving notes:", error);
+      setSaveNotesMessage("❌ Có lỗi xảy ra khi lưu ghi chú");
+      setTimeout(() => setSaveNotesMessage(""), 5000);
+    } finally {
+      setIsSavingNotes(false);
+    }
   };
 
   const canProceed = () => {
@@ -229,19 +379,54 @@ export default function LessonPage() {
     return currentStep === 6 ? "Hoàn thành 🎉" : "Tiếp theo";
   };
 
-  const handleNextStep = () => {
-    if (currentStep === 6) {
-      // Complete practice - you can add completion logic here
-      alert("Chúc mừng! Bạn đã hoàn thành tất cả các bước luyện tập!");
-      return;
-    }
-    setCurrentStep((prev) => prev + 1);
+  const getUnsavedCount = () => {
+    return notes.filter((note) => note.isLocal).length;
   };
 
-  const handlePrevStep = () => {
-    if (currentStep > 1) {
-      setCurrentStep((prev) => prev - 1);
+  const handleNextStep = async () => {
+    if (currentStep === 6) {
+      // Dừng timer tổng khi hoàn thành
+      if (totalTimerRef.current) {
+        clearInterval(totalTimerRef.current);
+      }
+
+      try {
+        // Gọi API đánh dấu lesson hoàn thành
+        const response = await fetch("http://localhost:5000/api/progress", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include", // gửi cookie nếu dùng session
+          body: JSON.stringify({
+            lessonId: id, // biến lưu lesson hiện tại
+            status: "completed",
+            totalTimeSpent: totalTimeSpent, // Gửi thời gian tổng lên server
+          }),
+        });
+
+        if (!response.ok) {
+          throw new Error("Không thể cập nhật tiến trình");
+        }
+
+        // Lấy dữ liệu JSON từ backend
+        const data = await response.json();
+
+        // Chuyển hướng dựa trên URL trả về từ backend
+        if (data.redirectUrl) {
+          window.location.href = data.redirectUrl;
+        } else {
+          // fallback nếu backend không trả về
+          window.location.href = "/dashboard/completed";
+        }
+      } catch (err) {
+        console.error(err);
+        alert("Có lỗi xảy ra khi lưu tiến trình");
+      }
+      return;
     }
+
+    setCurrentStep((prev) => prev + 1);
   };
 
   // --- nếu chưa có dữ liệu thì show loading ---
@@ -265,7 +450,15 @@ export default function LessonPage() {
       {/* Step Progress */}
       <div className={styles.stepProgress}>
         <div className={styles.stepHeader}>
-          <h2 className={styles.stepTitle}>{currentStepConfig.title}</h2>
+          <div className={styles.titleWithHelp}>
+            <h2 className={styles.stepTitle}>{currentStepConfig.title}</h2>
+            <div className={styles.helpTooltip}>
+              <HelpCircle size={14} className={styles.helpIcon} />
+              <div className={styles.tooltipContent}>
+                {currentStepConfig.content}
+              </div>
+            </div>
+          </div>
           <div className={styles.stepCounter}>Bước {currentStep}/6</div>
         </div>
 
@@ -286,7 +479,8 @@ export default function LessonPage() {
 
           <div className={styles.timeDisplay}>
             <Clock size={16} />
-            <span>{lesson.timeLimit}</span>
+            <span>{formatTime(totalTimeSpent)}</span>{" "}
+            {/* Hiển thị thời gian tổng */}
           </div>
         </header>
 
@@ -353,80 +547,178 @@ export default function LessonPage() {
         {/* Notes Section */}
         {currentStepConfig.allowedNote && (
           <div className={styles.notesSection}>
-            <button
-              onClick={() => setShowAddNote(!showAddNote)}
-              className={`${styles.addNoteBtn} ${
-                showAddNote ? styles.addNoteBtnActive : ""
-              }`}
-            >
-              <Plus size={16} />
-              Thêm Note
-            </button>
+            <div className={styles.notesSectionHeader}>
+              <h3 className={styles.notesSectionTitle}>
+                📝 Ghi chú của tôi
+                {loadingNotes && (
+                  <span className={styles.loadingText}> (đang tải...)</span>
+                )}
+              </h3>
 
-            {showAddNote && (
-              <div className={styles.addNoteForm}>
-                <textarea
-                  value={newNote}
-                  onChange={(e) => setNewNote(e.target.value)}
-                  placeholder="Nhập ghi chú của bạn..."
-                  className={styles.noteTextarea}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter" && e.ctrlKey) {
-                      addNote();
-                    }
-                    if (e.key === "Escape") {
-                      setShowAddNote(false);
-                      setNewNote("");
-                    }
-                  }}
-                />
-                <div className={styles.formActions}>
-                  <button onClick={addNote} className={styles.saveBtn}>
-                    Lưu (Ctrl+Enter)
-                  </button>
-                  <button
-                    onClick={() => {
-                      setShowAddNote(false);
-                      setNewNote("");
-                    }}
-                    className={styles.cancelBtn}
-                  >
-                    Hủy (Esc)
-                  </button>
-                </div>
-              </div>
-            )}
-
-            {notes.map((note, index) => (
-              <div key={index} className={styles.noteItem}>
-                <span>{note}</span>
+              <div className={styles.notesActions}>
                 <button
-                  onClick={() => deleteNote(index)}
-                  className={styles.deleteNoteBtn}
-                  title="Xóa ghi chú"
+                  onClick={() => setShowAddNote(!showAddNote)}
+                  className={`${styles.addNoteBtn} ${
+                    showAddNote ? styles.addNoteBtnActive : ""
+                  }`}
                 >
-                  ×
+                  <Plus size={16} />
+                  Thêm ghi chú
                 </button>
-              </div>
-            ))}
 
-            {notes.length === 0 && !showAddNote && (
-              <div className={styles.emptyState}>Chưa có ghi chú nào</div>
+                {notes.length > 0 && (
+                  <button
+                    onClick={saveNotes}
+                    disabled={isSavingNotes}
+                    className={`${styles.saveNotesBtn} ${
+                      isSavingNotes ? styles.saving : ""
+                    } ${getUnsavedCount() > 0 ? styles.hasUnsaved : ""}`}
+                    title="Lưu tất cả ghi chú lên server"
+                  >
+                    <Save size={16} />
+                    {isSavingNotes
+                      ? "Đang lưu..."
+                      : getUnsavedCount() > 0
+                      ? `Lưu (${getUnsavedCount()} thay đổi)`
+                      : "Đã lưu"}
+                  </button>
+                )}
+              </div>
+            </div>
+
+            {/* Hiển thị thông báo lưu */}
+            {saveNotesMessage && (
+              <div
+                className={`${styles.saveMessage} ${
+                  saveNotesMessage.includes("✅")
+                    ? styles.success
+                    : styles.error
+                }`}
+              >
+                {saveNotesMessage}
+              </div>
             )}
+
+            <div className={styles.notesContainer}>
+              {/* Add Note Form */}
+              {showAddNote && (
+                <div className={styles.addNoteForm}>
+                  <textarea
+                    value={newNote}
+                    onChange={(e) => setNewNote(e.target.value)}
+                    placeholder="Nhập ghi chú của bạn..."
+                    className={styles.noteTextarea}
+                    onKeyDown={(e) => {
+                      if (
+                        (e.key === "Enter" && (e.ctrlKey || e.metaKey)) ||
+                        (e.key === "Enter" && e.shiftKey)
+                      ) {
+                        e.preventDefault();
+                        addNote();
+                      }
+                      if (e.key === "Escape") {
+                        setShowAddNote(false);
+                        setNewNote("");
+                      }
+                    }}
+                  />
+                  <div className={styles.formActions}>
+                    <button onClick={addNote} className={styles.saveBtn}>
+                      Thêm (Ctrl+Enter)
+                    </button>
+                    <button
+                      onClick={() => {
+                        setShowAddNote(false);
+                        setNewNote("");
+                      }}
+                      className={styles.cancelBtn}
+                    >
+                      Hủy (Esc)
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {/* Notes List */}
+              {notes.map((note) => (
+                <div
+                  key={note.id}
+                  className={`${styles.noteItem} ${
+                    note.isLocal ? styles.unsavedNote : ""
+                  }`}
+                >
+                  {editingNoteId === note.id ? (
+                    <div className={styles.editNoteForm}>
+                      <textarea
+                        value={editingContent}
+                        onChange={(e) => setEditingContent(e.target.value)}
+                        className={styles.editTextarea}
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) {
+                            e.preventDefault();
+                            saveEditNote();
+                          }
+                          if (e.key === "Escape") {
+                            cancelEditNote();
+                          }
+                        }}
+                      />
+                      <div className={styles.editActions}>
+                        <button
+                          onClick={saveEditNote}
+                          className={styles.confirmBtn}
+                          title="Lưu thay đổi (Ctrl+Enter)"
+                        >
+                          <Check size={16} />
+                        </button>
+                        <button
+                          onClick={cancelEditNote}
+                          className={styles.cancelEditBtn}
+                          title="Hủy chỉnh sửa (Esc)"
+                        >
+                          <X size={16} />
+                        </button>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className={styles.noteContent}>
+                      <div className={styles.noteText}>{note.content}</div>
+                      <div className={styles.noteItemActions}>
+                        <button
+                          onClick={() => startEditNote(note.id, note.content)}
+                          className={styles.editNoteBtn}
+                          title="Chỉnh sửa ghi chú"
+                        >
+                          <Edit3 size={14} />
+                        </button>
+                        <button
+                          onClick={() => deleteNote(note.id)}
+                          className={styles.deleteNoteBtn}
+                          title="Xóa ghi chú"
+                        >
+                          ×
+                        </button>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              ))}
+
+              {notes.length === 0 && !showAddNote && !loadingNotes && (
+                <div className={styles.emptyState}>
+                  <p>Chưa có ghi chú nào</p>
+                  <p className={styles.emptySubtext}>
+                    Thêm ghi chú để lưu lại những điểm quan trọng trong bài học
+                  </p>
+                </div>
+              )}
+            </div>
           </div>
         )}
       </main>
 
       {/* Step Navigation */}
       <div className={styles.stepNavigation}>
-        <button
-          onClick={handlePrevStep}
-          disabled={currentStep === 1}
-          className={styles.navBtn}
-        >
-          Quay lại
-        </button>
-
         <button
           onClick={handleNextStep}
           disabled={!canProceed()}

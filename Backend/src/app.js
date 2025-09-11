@@ -6,10 +6,12 @@ const GoogleStrategy = require("passport-google-oauth20").Strategy;
 const session = require("express-session");
 const MongoStore = require("connect-mongo");
 const connectDB = require("./config/db");
-const User = require("./models/User"); // 🔹 Import User model
+const User = require("./models/User");
 const userRoutes = require("./routes/userRoutes");
 const lessonRoutes = require("./routes/lessonRoutes");
 const unitRoutes = require("./routes/unitRoutes");
+const noteRoutes = require("./routes/noteRoutes");
+const progressRoutes = require("./routes/progressRoutes");
 
 dotenv.config();
 connectDB();
@@ -92,7 +94,8 @@ passport.deserializeUser(async (id, done) => {
 app.use("/api/users", userRoutes);
 app.use("/api/lessons", lessonRoutes);
 app.use("/api/units", unitRoutes);
-app.use("/api/notes", unitRoutes);
+app.use("/api/notes", noteRoutes);
+app.use("/api/progress", progressRoutes);
 
 // Route login
 app.get(

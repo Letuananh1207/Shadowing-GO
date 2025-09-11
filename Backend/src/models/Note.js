@@ -6,7 +6,7 @@ const noteSchema = new mongoose.Schema({
     ref: "User",
     required: true,
   },
-  content: { type: String, required: true },
+  content: [{ type: String, required: true }],
   lessonId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Lesson",

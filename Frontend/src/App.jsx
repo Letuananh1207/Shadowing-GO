@@ -11,7 +11,11 @@ export default function App() {
         <Header />
         <main className="mainContent">
           <Routes>
-            <Route path="/" element={<DashBoard />} />
+            <Route path="/dashboard" element={<DashBoard tabIndex={1} />} />
+            <Route
+              path="/dashboard/inprogress"
+              element={<DashBoard tabIndex={2} />}
+            />
             <Route path="/learn/:id" element={<LessonPage />} />
           </Routes>
         </main>

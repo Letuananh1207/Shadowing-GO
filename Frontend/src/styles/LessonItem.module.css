@@ -12,12 +12,40 @@ button {
   border-bottom: 1px solid #cccccc;
 }
 
+.iconBlock {
+  position: relative;
+}
+
 .lessonIcon {
   width: 52px;
 }
 
+/* Khi có class done */
+.iconBlock.done .lessonIcon {
+  opacity: 0.1; /* mờ ảnh chính */
+}
+
+/* Khi iconBlock có class done */
+.iconBlock.done::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 0;
+  transform: translate(-50%, -50%);
+  width: 32px; /* kích thước check icon */
+  height: 32px;
+  background-image: url("../assets/check.svg"); /* đường dẫn SVG check */
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+
 .lessonIntro {
   flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  justify-content: center;
 }
 
 .subtitle {
@@ -25,7 +53,7 @@ button {
 }
 
 .title {
-  margin-bottom: 5px;
+  font-size: 1em;
 }
 
 .lessonIntro ul {

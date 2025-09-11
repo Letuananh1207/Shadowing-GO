@@ -3,6 +3,7 @@
   padding-top: 1rem;
   top: 64px;
   background-color: white;
+  z-index: 1;
 }
 
 .dashBoard_headBar h1 {
@@ -68,10 +69,10 @@
   margin-bottom: 30px;
 }
 .unit header {
-  margin: 1.8rem 1.25rem;
+  margin: 1rem 1.25rem;
   display: flex;
   align-items: center;
-  gap: 32px;
+  gap: 26px;
   /* justify-content: space-between; */
 }
 

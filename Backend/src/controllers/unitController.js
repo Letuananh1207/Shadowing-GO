@@ -18,6 +18,9 @@ const getUnits = async (req, res) => {
 
     // 2. Lấy progress hiện tại của user
     let progress = await Progress.findOne({ userId: req.user._id });
+    // let progress = await Progress.findOne({
+    //   userId: "68c15ef49e5bbae4f8562318",
+    // });
 
     let currentLessonId = null;
     let currentIndex = 1;

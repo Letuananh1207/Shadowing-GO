@@ -8,7 +8,7 @@ export default function Header() {
       <div className={styles.headerContent}>
         {/* Logo + Tên ứng dụng */}
         <div className={styles.logoWrapper}>
-          <a href="/">
+          <a href="/dashboard">
             <img
               src="/Maneki-Neko.png"
               alt="Shadowing GO Logo"
